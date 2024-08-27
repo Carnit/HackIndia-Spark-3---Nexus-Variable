@@ -44,3 +44,5 @@ ignition/deployments/chain-31337
 pacakage-lock.json
 pacakage.json
 vite.config.json
+eslint.config.js
+hardhat.config.js
