@@ -41,8 +41,8 @@ node_modules
 # Hardhat Ignition default folder for deployments against a local node
 ignition/deployments/chain-31337
 
-pacakage-lock.json
-pacakage.json
-vite.config.json
+package-lock.json
+package.json
+vite.config.js
 eslint.config.js
-hardhat.config.js
+hardhat.config.cjs
