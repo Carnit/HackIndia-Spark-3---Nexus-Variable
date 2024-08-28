@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract Flux1NFT is ERC721, Ownable {
     uint256 public nextTokenId;
 
-    constructor() ERC721("Flux1NFT", "FLUX") Ownable() {}
+    constructor() ERC721("Flux1NFT", "FLUX") Ownable(msg.sender) {}
 
     function mint(address to) external onlyOwner {
         _safeMint(to, nextTokenId);
