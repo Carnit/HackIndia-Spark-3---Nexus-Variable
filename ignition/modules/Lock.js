@@ -1,15 +1,40 @@
-import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
+import { expect } from "chai";
+import { ethers } from "hardhat";
 
-const JAN_1ST_2030 = 1893456000;
-const ONE_GWEI = 1_000_000_000n;
+describe("Flux1NFT", function () {
+  let Flux1NFT;
+  let flux1NFT;
+  let owner;
+  let addr1;
+  let addr2;
 
-export default buildModule("LockModule", (m) => {
-  const unlockTime = m.getParameter("unlockTime", JAN_1ST_2030);
-  const lockedAmount = m.getParameter("lockedAmount", ONE_GWEI);
+  beforeEach(async function () {
+    Flux1NFT = await ethers.getContractFactory("Flux1NFT");
+    [owner, addr1, addr2] = await ethers.getSigners();
 
-  const lock = m.contract("Lock", [unlockTime], {
-    value: lockedAmount,
+    flux1NFT = await Flux1NFT.deploy();
+    await flux1NFT.deployed();
   });
 
-  return { lock };
+  it("Should deploy the contract and set the correct owner", async function () {
+    expect(await flux1NFT.owner()).to.equal(owner.address);
+  });
+
+  it("Should allow the owner to mint a new NFT", async function () {
+    await flux1NFT.mint(addr1.address);
+
+    expect(await flux1NFT.balanceOf(addr1.address)).to.equal(1);
+    expect(await flux1NFT.ownerOf(0)).to.equal(addr1.address);
+  });
+
+  it("Should increment the nextTokenId after each mint", async function () {
+    await flux1NFT.mint(addr1.address);
+    await flux1NFT.mint(addr2.address);
+
+    expect(await flux1NFT.nextTokenId()).to.equal(2);
+  });
+
+  it("Should not allow non-owners to mint", async function () {
+    await expect(flux1NFT.connect(addr1).mint(addr2.address)).to.be.revertedWith("Ownable: caller is not the owner");
+  });
 });

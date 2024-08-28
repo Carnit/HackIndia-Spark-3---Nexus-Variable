@@ -1,5 +1,5 @@
-const { expect } = require("chai");
-const { ethers } = require("hardhat");
+import { expect } from "chai";
+import { ethers } from "hardhat";
 
 describe("Flux1NFT", function () {
   let Flux1NFT;
@@ -10,7 +10,7 @@ describe("Flux1NFT", function () {
 
   beforeEach(async function () {
     Flux1NFT = await ethers.getContractFactory("Flux1NFT");
-    [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
+    [owner, addr1, addr2] = await ethers.getSigners();
 
     flux1NFT = await Flux1NFT.deploy();
     await flux1NFT.deployed();
